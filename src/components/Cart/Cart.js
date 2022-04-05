@@ -2,8 +2,11 @@ import React from 'react';
 
 const Cart = props => {
     const {cart} = props;
-    const total = cart.reduce((previous,current)=>previous + current.price,0)
-    const quantity = cart.reduce((previous,current)=> previous+ current.quantity,0)
+    const quantity = cart.reduce((previous,current)=> previous+ current.quantity,0);
+    let total = 0;
+    for(const product of cart){
+        total = total + product.price * product.quantity;
+    }
     return (
         <div>
             <h2>Order Summary</h2>
