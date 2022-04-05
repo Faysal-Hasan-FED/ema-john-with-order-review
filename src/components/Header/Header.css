@@ -1,0 +1,11 @@
+nav{
+    line-height: 40px;
+    text-align: center;
+    background-color: black;
+}
+
+nav a{
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
