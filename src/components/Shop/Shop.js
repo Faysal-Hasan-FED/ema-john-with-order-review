@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import useProducts from '../../hooks/useProducts';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
+import { addToDb, getStoredCart } from '../../utilities/fakedb';
 import './Shop.css';
 
 const Shop = () => {
@@ -18,6 +18,23 @@ const Shop = () => {
         });
     },[]);
 
+    // get addedproducts from the db and show in the cart
+    useEffect(()=>{
+        if(products.length){
+            const savedCart = getStoredCart();
+            const storedCart = [];
+            for(const key in savedCart){
+                const addedProduct = products.find(product => product.key === key);
+                if(addedProduct){
+                    const quantity = savedCart[key];
+                    addedProduct.quantity = quantity;
+                    storedCart.push(addedProduct);
+                }
+            }
+            setCart(storedCart);
+        }
+    },[products]);
+
     // handle search functionality
     const handleSearch = e =>{
         const searchText = e.target.value;
@@ -27,8 +44,12 @@ const Shop = () => {
 
     // lift up the state
     const handleAddToCart = product =>{
+        if(!product.quantity){
+            product.quantity = 1;
+        }
         const newCart = [...cart,product];
         setCart(newCart);
+        addToDb(product.key);
     }
     
     return (
